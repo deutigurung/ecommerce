@@ -19,6 +19,8 @@ class Product extends Model
     {
         $getCate = $this->cate_id;
         $search = Category::select('cate_title')->where('id',$getCate)->get();
+        /*echo "<pre>";
+        print_r($search);*/
         return ($search);
     }
 }

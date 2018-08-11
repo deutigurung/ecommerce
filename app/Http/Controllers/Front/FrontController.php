@@ -17,9 +17,6 @@ class FrontController extends Controller
 
     public function getAll()
     {
-        //dd(Session::get('cart'));
-        //echo "<pre>";
-        //print_r(Session::get('cart'));
         return view('fronts.home');
     }
 

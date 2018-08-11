@@ -9,7 +9,10 @@
                     <li><a href="#">Home</a></li>
                     <li><a href="#">Products</a></li>
                     @if($product)
-                        <li><a href="#">{{ $product->getCategoryProduct($product->cate_id) }}</a></li>
+                        @php
+                           $cate_name = $product->getCategoryProduct($product->cate_id);
+                        @endphp
+                        <li><a href="#">{{ $cate_name[0]['cate_title']}}</a></li>
                         <li class="active">{{ $product->name }}</li>
                     @endif
                 </ul>
@@ -73,7 +76,12 @@
                                             <span class="text-uppercase">QTY: </span>
                                             <input class="input" type="number" min="1">
                                         </div>
-                                        <a href="{{ route('cart.add_to_cart',$product->id) }}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                                        <a href="javascript:void(0);" class="primary-btn add-to-cart"
+                                           onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                                        <form method="POST" id="add_to_cart" action="{{ route('cart.add_to_cart',$product->id) }}">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{$product->id}}">
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -253,7 +261,12 @@
                                 </div>
                                 <h2 class="product-name"><a href="{{ route('front.pro_details',$other_product->id) }}">{{ $other_product->name }}</a></h2>
                                 <div class="product-btns">
-                                    <a href="{{ route('cart.add_to_cart',$other_product->id) }}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                                    <a href="javascript:void(0);" class="primary-btn add-to-cart"
+                                       onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                                    <form method="POST" id="add_to_cart" action="{{ route('cart.add_to_cart',$other_product->id) }}">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{$other_product->id}}">
+                                    </form>
                                 </div>
                             </div>
                         </div>

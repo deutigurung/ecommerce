@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
     $('#cate_id').on('change',function (e) {
        var category =  $(this).val();
        $.ajax({
@@ -28,3 +27,4 @@ $(document).ready(function(){
 
     })
 });
+

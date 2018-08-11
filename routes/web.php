@@ -19,10 +19,11 @@ Route::group(['as'=>'front.','namespace'=>'Front'], function () {
 });
 
 /** Cart Route**/
-Route::group(['as'=>'cart.','namespace'=>'Cart',['middleware'=>'auth']],function() {
-    Route::get('add-to-cart/{id}','CartController@AddToCart')->name('add_to_cart');
-    Route::get('shopping-cart','CartController@getCart')->name('view');
+Route::group(['as'=>'cart.','namespace'=>'Cart'],function() {
+    Route::post('cart/','CartController@AddToCart')->name('add_to_cart');
+    Route::get('cart-view','CartController@getCart')->name('view');
     Route::get('checkout','CartController@checkoutCart')->name('checkout');
+    Route::delete('cart-view/{id}','CartController@destroyCartProduct')->name('destroy_cart_product');
 });
 
 Auth::routes();

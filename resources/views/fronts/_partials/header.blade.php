@@ -72,7 +72,7 @@
                 <!-- Search -->
                 <div class="header-search">
                     <form method="get" action="{{ url('search') }}">
-                        <input class="input search-input" name="keyword" id="keyword" type="text" placeholder="Enter your keyword">
+                        <input class="input search-input" name="keyword" id="keyword" type="text" placeholder="I'm looking for ">
                         <select class="input search-categories" name="cate_id">
                             <option value="0">All Categories</option>
                             @foreach($categories as $category)
@@ -106,7 +106,6 @@
                             @endif
                         <ul class="custom-menu">
                             @if(auth()->user())
-
                                 <li><i class="fa fa-user-o"></i> My Account</li>
 
                                 <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
@@ -121,43 +120,45 @@
                     <!-- /Account -->
 
                     <!-- Cart -->
-                    @if(Session::has('cart'))
-                        {{--@dd(session()->get('cart'))--}}
-                        <li class="header-cart dropdown default-dropdown">
-                        <a href="{{ route('cart.view') }}" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <li class="header-cart dropdown default-dropdown">
+                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                             <div class="header-btns-icon">
                                 <i class="fa fa-shopping-cart"></i>
+                                @if(Session::has('cart'))
                                 <span class="qty">{{ Session::has('cart') ? Session::get('cart')->totalQty : '' }}</span>
+                                @endif
                             </div>
                             <strong class="text-uppercase">My Cart:</strong>
                             <br>
+                            @if(Session::has('cart'))
                             <span>NPR:{{  Session::has('cart') ? Session::get('cart')->totalPrice : '' }}</span>
+                            @endif
                         </a>
                         <div class="custom-menu">
                             <div id="shopping-cart">
-
-                                    <div class="shopping-cart-list">
-                                        @php  $items = session()->get('cart');  @endphp
+                                <div class="shopping-cart-list">
+                                    @if(Session::has('cart'))
+                                        @php  $items = session()->get('cart'); @endphp
                                         @foreach($items->items as $item)
-
-                                        <div class="product product-widget">
-                                            <div class="product-thumb">
-                                               {{-- @if($product->image && app('files')->exists($product->image))
-                                                    <img src="{!! asset($product->image) !!}" alt="">
-                                                    @else
-                                                    <img src="{!! asset('front-assets/no-image.jpg') !!}">
-                                                @endif--}}
+                                            <div class="product product-widget">
+                                                <div class="product-thumb">
+                                                    @if($item['item']->image && app('files')->exists($item['item']->image))
+                                                        <img src="{!! asset($item['item']->image) !!}" alt="{{ $item['item']->name }}">
+                                                        @else
+                                                        <img src="{!! asset('front-assets/no-image.jpg') !!}">
+                                                    @endif
+                                                </div>
+                                                <div class="product-body">
+                                                    <h3 class="product-price">NPR {!! $item['price'] !!} <span class="qty"> x {!! $item['qty'] !!}</span></h3>
+                                                    <h2 class="product-name"><a href="#">{!! $item['item']->name !!}</a></h2>
+                                                </div>
+                                                <button class="cancel-btn"><i class="fa fa-trash"></i></button>
                                             </div>
-                                            <div class="product-body">
-                                                <h3 class="product-price">$ {!! $item['price'] !!} <span class="qty"> x {!! $item['qty'] !!}</span></h3>
-                                                <h2 class="product-name"><a href="#">{!! $item['item']->name !!}</a></h2>
-                                            </div>
-                                            <button class="cancel-btn"><i class="fa fa-trash"></i></button>
-                                        </div>
-                                      @endforeach
-                                    </div>
-
-
+                                        @endforeach
+                                        @else
+                                        <p>No cart found !!</p>
+                                    @endif
+                                </div>
                                 <div class="shopping-cart-btns">
                                     <a href="{{ route('cart.view') }}"  class="main-btn">View Cart</a>
                                     <a href="{{ route('cart.checkout') }}"  class="primary-btn">Checkout <i class="fa fa-arrow-circle-right"></i></a>
@@ -165,7 +166,7 @@
                             </div>
                         </div>
                     </li>
-                    @endif
+
                     <!-- /Cart -->
 
                     <!-- Mobile nav toggle-->
@@ -193,37 +194,35 @@
                         @foreach($categories as $category)
                             @if($category->subCategories->count() > 0)
                                 <li class="dropdown side-dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">{{ $category->cate_title }}<i class="fa fa-angle-right"></i>
-                                        <div class="custom-menu">
-                                            <div class="row">
-
-                                                    <div class="col-md-4">
-                                                        <ul class="list-links">
-                                                            <li><h3 class="list-links-title">{{ $category->cate_title }}</h3></li>
-                                                            @foreach($category->subCategories as $subCategory)
-                                                                <li><a href="{{ route('front.product',$subCategory->id) }}">{!! $subCategory->cate_title !!}</a></li>
-                                                            @endforeach
-                                                        </ul>
-                                                        <hr class="hidden-md hidden-lg">
-                                                    </div>
-
-                                            </div>
-                                            <div class="row hidden-sm hidden-xs">
-                                                <div class="col-md-12">
-                                                    <hr>
-                                                    <a class="banner banner-1" href="#">
-                                                        @if(isset($category->image) && app('files')->exists($category->image))
-                                                            <img src="{{ asset($category->image)}}" alt="{{ $category->cate_title }}" height="300px">
-                                                        @endif
-                                                        <div class="banner-caption text-center">
-                                                            <h2 class="white-color">{{ $category->cate_title }}</h2>
-                                                            <h3 class="white-color font-weak">HOT DEAL</h3>
-                                                        </div>
-                                                    </a>
-                                                </div>
+                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">{{ $category->cate_title }}<i class="fa fa-angle-right"></i></a>
+                                    <div class="custom-menu">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <ul class="list-links">
+                                                    <li><h3 class="list-links-title">{{ $category->cate_title }}</h3></li>
+                                                    @foreach($category->subCategories as $subCategory)
+                                                        <li><a href="{{ route('front.product',$subCategory->id) }}">{!! $subCategory->cate_title !!}</a></li>
+                                                    @endforeach
+                                                </ul>
+                                                <hr class="hidden-md hidden-lg">
                                             </div>
                                         </div>
-                                </li>
+                                        <div class="row hidden-sm hidden-xs">
+                                            <div class="col-md-12">
+                                                <hr>
+                                                <a class="banner banner-1" href="#">
+                                                    @if(isset($category->image) && app('files')->exists($category->image))
+                                                        <img src="{{ asset($category->image)}}" alt="{{ $category->cate_title }}" height="300px">
+                                                    @endif
+                                                    <div class="banner-caption text-center">
+                                                        <h2 class="white-color">{{ $category->cate_title }}</h2>
+                                                        <h3 class="white-color font-weak">HOT DEAL</h3>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </li>
                                 @else
                                 <li><a href="{{ route('front.product',$category->id) }}">{{ $category->cate_title }}</a></li>
                             @endif
