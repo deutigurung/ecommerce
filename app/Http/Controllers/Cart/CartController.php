@@ -12,7 +12,7 @@ class CartController extends Controller
 {
     public function getCart(){
         if (!Session::has('cart')) {
-            return route('front.home');
+            return redirect()->route('front.home');
         }
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
@@ -28,18 +28,27 @@ class CartController extends Controller
         return back();
     }
 
-    public function cartUpdate(Request $request,$id){
-        Cart::update($id,$request->qty);
+    public function cartUpdate(Request $request,$id)
+    {
+
+        $qty = $request->input('qty');
+        $product = Product::find($id);
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->updateCart($product,$product->id,$qty);
+        //dd($cart);
+        $request->session()->put('cart', $cart);
         return back();
     }
 
     public function destroyCart($id){
-        Cart::remove($id);
-        return back();
+        //dd(session()->get('cart'));
+        session()->forget('cart', $id);
+        return redirect()->back();
     }
 
     public function clearCart(){
-        request()->session()->flush();
-        return route('front.home');
+        session()->forget('cart');
+        return redirect()->route('front.home');
     }
 }

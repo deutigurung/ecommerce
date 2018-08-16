@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         $banners = Banner::where('status',1)->get();
         $products = Product::orderBy('created_at','desc')->limit(20)->get();
         $categories = Category::where('is_parent',0)->get();
+        //$deal_products = Product::where('status',1)->where('created_at','desc')->get();
         $current_page = request()->path();
         // dd($current_page);
         view()->composer('*',function($view) use($banners,$products,$categories,$current_page){
@@ -30,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
                 'products'=>$products,
                 'categories'=>$categories,
                 'current_page'=>$current_page,
+                //'deal_products'=>$deal_products
             ]);
         });
     }

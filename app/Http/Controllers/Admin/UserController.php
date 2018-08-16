@@ -120,4 +120,13 @@ class UserController extends Controller
         }
 
     }
+
+    public function getProfile() {
+        $orders = auth()->user()->orders;
+        $orders->transform(function($order, $key) {
+            $order->cart = unserialize($order->cart);
+            return $order;
+        });
+        return view('profile', ['orders' => $orders]);
+    }
 }

@@ -41,4 +41,26 @@ class Cart extends Model
         $this->totalPrice += $item->price;
     }
 
+    public function updateCart($item,$id,$qty)
+    {
+        $storedItem = ['qty'=>0,'price'=> $item->price, 'item'=>$item];
+
+        //dd($storedItem);
+        if($this->items){ //already exists item in cart
+            if(array_key_exists($id,$this->items)){
+                $storedItem = $this->items[$id];
+            }
+        }
+        $storedItem['qty'] = $qty;
+        if($item->discount){
+            $price = $item->price - $item->price * $item->discount /100;
+            $item->price = $price;
+        }else{
+            $item->price = $item->price;
+        }
+        $storedItem['price'] =  $item->price * $storedItem['qty'];
+        $this->items[$id] = $storedItem;
+        $this->totalQty ++;
+        //$this->totalPrice += $item->price;
+    }
 }

@@ -28,7 +28,7 @@ Route::group(['as'=>'cart.','namespace'=>'Cart'],function(){
     Route::post('add-to-cart/{id}','CartController@AddToCart')->name('addCart');
     Route::post('cart-store','CartController@store')->name('store');
     Route::get('cart/{id}','CartController@cartUpdate')->name('cartUpdate');
-    Route::delete('cart/{id}','CartController@destroyCart')->name('deleteCart');
+    Route::delete('cart/delete/{id}','CartController@destroyCart')->name('deleteCart');
     Route::get('clearCart','CartController@clearCart')->name('clearCart');
 });
 Route::group(['middleware'=>'auth'],function (){
@@ -38,6 +38,7 @@ Route::group(['middleware'=>'auth'],function (){
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/profile', 'Admin\UserController@getProfile')->name('profile');
 
 Route::get('/admin',['as'=>'admin.dashboard', 'uses'=>'Admin\DashboardController@getDashboard',['middleware' => 'auth']]);
 

@@ -40,20 +40,31 @@
                                     @foreach($cartItem as $item)
                                         <tr>
                                             <td class="thumb"><img src="{{ $item['item']->image }}" alt=""></td>
-                                            <td class="details">{{ $item['item']->id }}
+                                            <td class="details">
                                                 <a href="#">{{ $item['item']->name }}</a><br>
                                             </td>
                                             <td class="price text-center">
                                                 <strong>NPR. {{ $item['item']->price }}</strong><br/>
                                             </td>
                                             <td class="qty text-center center">
-                                                <input type="number" name="qty" class="input" value="{!! $item['qty'] !!}">
+                                                <form method="get" action="{{ route('cart.cartUpdate',$item['item']->id) }}">
+                                                    <input type="number" name="qty" class="input" value="{!! $item['qty'] !!}">
+                                                    <button type="submit">Ok</button>
+                                                </form>
                                           </td>
                                             <td class="total text-center">
                                                 <strong class="primary-color">NPR. {!! $item['price'] !!}</strong>
                                             </td>
                                             <td class="text-right">
-                                                <a class="main-btn icon-btn"><i class="fa fa-close"></i></a>
+                                                <a href="#" onclick="document.querySelector('#deleteForm').submit();return false;" class="main-btn icon-btn"><i class="fa fa-close"></i></a>
+
+                                                <form method="POST" action="{{ route('cart.deleteCart',$item['item']->id) }}" id="deleteForm">
+                                                    {{ method_field('delete') }}
+                                                    @csrf
+
+                                                </form>
+
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -71,6 +82,7 @@
                             </table>
                             <div class="pull-left">
                                 <a href="{{ url('/') }}" class="primary-btn">Continue Shopping</a>
+                                <a href="{{ route('cart.clearCart') }}" class="primary-btn">Clear Cart</a>
                             </div>
                             <div class="pull-right">
                                 <a href="{{ route('cart.checkout') }}" class="primary-btn">Place Order</a>

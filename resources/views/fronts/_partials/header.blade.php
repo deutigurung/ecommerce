@@ -203,17 +203,20 @@
                     <li class="dropdown mega-dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Women <i class="fa fa-caret-down"></i></a>
                         <div class="custom-menu">
                             <div class="row">
-                            </div>
-                            <div class="row hidden-sm hidden-xs">
-                                <div class="col-md-12">
-                                    <hr>
-                                    <a class="banner banner-1" href="#">
-                                        <img src="front-assets/images/banner05.jpg" alt="">
-                                        <div class="banner-caption text-center">
-                                            <h2 class="white-color">NEW COLLECTION</h2>
-                                            <h3 class="white-color font-weak">HOT DEAL</h3>
-                                        </div>
-                                    </a>
+                                <div class="col-md-4">
+                                    @foreach($categories as $category)
+                                        @if($category->subCategories->count() > 0)
+                                            <ul class="list-links">
+                                                <li>
+                                                    <h3 class="list-links-title">{{ $category->cate_title }}</h3>
+                                                </li>
+                                                @foreach($category->subCategories as $subCategory)
+                                                    <li><a href="{{ route('front.product',$subCategory->id) }}">{!! $subCategory->cate_title !!}</a></li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    @endforeach
+                                    <hr class="hidden-md hidden-lg">
                                 </div>
                             </div>
                         </div>
@@ -221,17 +224,20 @@
                     <li class="dropdown mega-dropdown full-width"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Men <i class="fa fa-caret-down"></i></a>
                         <div class="custom-menu">
                             <div class="row">
+                                <div class="col-md-4">
+                                    <ul class="list-links">
+                                        <li>
+                                            <h3 class="list-links-title">Categories</h3></li>
+                                        <li><a href="#">Women’s Clothing</a></li>
+                                        <li><a href="#">Men’s Clothing</a></li>
+                                        <li><a href="#">Phones & Accessories</a></li>
+                                        <li><a href="#">Jewelry & Watches</a></li>
+                                        <li><a href="#">Bags & Shoes</a></li>
+                                    </ul>
+                                    <hr class="hidden-md hidden-lg">
+                                </div>
                             </div>
                         </div>
-                    </li>
-                    <li><a href="#">Sales</a></li>
-                    <li class="dropdown default-dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Pages <i class="fa fa-caret-down"></i></a>
-                        <ul class="custom-menu">
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="products.html">Products</a></li>
-                            <li><a href="product-page.html">Product Details</a></li>
-                            <li><a href="checkout.html">Checkout</a></li>
-                        </ul>
                     </li>
                 </ul>
             </div>

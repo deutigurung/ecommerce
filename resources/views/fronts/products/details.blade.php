@@ -255,7 +255,7 @@
                                     <i class="fa fa-star-o empty"></i>
                                 </div>
                                 <h2 class="product-name"><a href="{{ route('front.pro_details',$other_product->id) }}">{{ $other_product->name }}</a></h2>
-                                {{--<div class="product-btns">
+                               {{-- <div class="product-btns">
                                     <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
                                     <button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
                                     <a href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"
