@@ -61,8 +61,10 @@
                                 <p><strong>Availability:</strong> {{ ($data->status = 1) ? 'Available' : 'Out of Stock' }}</p>
                                 <p><strong>Brand:</strong> E-SHOP</p>
                                 <p>{!! $data->summary !!}</p>
-
-                                <div class="product-btns">
+                                <a href="{!! route('front.pro_details',$data->id) !!}" class="main-btn quick-view">
+                                    <i class="fa fa-search-plus"></i> Quick view
+                                </a>
+                                {{--<div class="product-btns">
                                     <div class="qty-input">
                                         <span class="text-uppercase">QTY: </span>
                                         <input class="input" type="number" min="1">
@@ -73,7 +75,7 @@
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{$data->id}}">
                                     </form>
-                                </div>
+                                </div>--}}
                             </div>
                         </div>
                         <!-- /Product Details -->

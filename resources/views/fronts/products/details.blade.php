@@ -72,13 +72,11 @@
                                     <p>{!! $product->summary !!}</p>
 
                                     <div class="product-btns">
-                                        <div class="qty-input">
-                                            <span class="text-uppercase">QTY: </span>
-                                            <input class="input" type="number" min="1">
-                                        </div>
-                                        <a href="javascript:void(0);" class="primary-btn add-to-cart"
-                                           onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
-                                        <form method="POST" id="add_to_cart" action="{{ route('cart.add_to_cart',$product->id) }}">
+                                        <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+                                        <button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
+                                        <a href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"
+                                           class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                                        <form method="POST" id="add_to_cart" action="{{ route('cart.addCart',$product->id) }}">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{$product->id}}">
                                         </form>
@@ -191,9 +189,6 @@
                                                     </form>
                                                 </div>
                                             </div>
-
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -260,14 +255,16 @@
                                     <i class="fa fa-star-o empty"></i>
                                 </div>
                                 <h2 class="product-name"><a href="{{ route('front.pro_details',$other_product->id) }}">{{ $other_product->name }}</a></h2>
-                                <div class="product-btns">
-                                    <a href="javascript:void(0);" class="primary-btn add-to-cart"
-                                       onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
-                                    <form method="POST" id="add_to_cart" action="{{ route('cart.add_to_cart',$other_product->id) }}">
+                                {{--<div class="product-btns">
+                                    <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+                                    <button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
+                                    <a href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"
+                                       class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                                    <form method="POST" id="add_to_cart" action="{{ route('cart.addCart',$other_product->id) }}">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{$other_product->id}}">
                                     </form>
-                                </div>
+                                </div>--}}
                             </div>
                         </div>
                     </div>

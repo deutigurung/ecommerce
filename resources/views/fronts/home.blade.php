@@ -125,16 +125,6 @@
                                     <i class="fa fa-star-o empty"></i>
                                 </div>
                                 <h2 class="product-name"><a href="{{ route('front.pro_details',$product->id) }}">{!! $product->name !!}</a></h2>
-                                <div class="product-btns">
-                                    <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-                                    <button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-                                    <a href="javascript:void(0);" class="primary-btn add-to-cart"
-                                       onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
-                                    <form method="POST" id="add_to_cart" action="{{ route('cart.add_to_cart',$product->id) }}">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{$product->id}}">
-                                    </form>
-                                </div>
                             </div>
                         </div>
                     </div>

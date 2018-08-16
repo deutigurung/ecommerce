@@ -11,14 +11,14 @@ class Cart extends Model
     public $totalQty = 0; // initalization total cart quantity
     public $totalPrice = 0; // initalization total cart price
 
-   /* public function __construct($oldCart)
+    public function __construct($oldCart)
     {
         if($oldCart){
             $this->items = $oldCart->items;
             $this->totalPrice = $oldCart->totalPrice;
             $this->totalQty = $oldCart->totalQty;
         }
-    }*/
+    }
 
     public function addCart($item, $id){
         $storedItem = ['qty'=>0,'price'=> $item->price, 'item'=>$item];
@@ -30,8 +30,10 @@ class Cart extends Model
         }
         $storedItem['qty']++;
         if($item->discount){
-            $discount_amt = $item->price - $item->price * $item->discount /100;
-            $item->price = $discount_amt;
+            $price = $item->price - $item->price * $item->discount /100;
+            $item->price = $price;
+        }else{
+            $item->price = $item->price;
         }
         $storedItem['price'] =  $item->price * $storedItem['qty'];
         $this->items[$id] = $storedItem;

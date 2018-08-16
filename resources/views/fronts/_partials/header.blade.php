@@ -121,55 +121,18 @@
 
                     <!-- Cart -->
                     <li class="header-cart dropdown default-dropdown">
-                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                        <a href="{{ route('cart.index') }}" class="dropdown-toggle" aria-expanded="true">
                             <div class="header-btns-icon">
                                 <i class="fa fa-shopping-cart"></i>
-                                @if(Session::has('cart'))
-                                <span class="qty">{{ Session::has('cart') ? Session::get('cart')->totalQty : '' }}</span>
-                                @endif
+                                <span class="qty">{{ Session::has('cart') ? Session::get('cart')->totalQty : 0 }}</span>
                             </div>
                             <strong class="text-uppercase">My Cart:</strong>
                             <br>
-                            @if(Session::has('cart'))
-                            <span>NPR:{{  Session::has('cart') ? Session::get('cart')->totalPrice : '' }}</span>
-                            @endif
+                            <span>NPR: {{ Session::has('cart') ? Session::get('cart')->totalPrice : 0 }}</span>
                         </a>
-                        <div class="custom-menu">
-                            <div id="shopping-cart">
-                                <div class="shopping-cart-list">
-                                    @if(Session::has('cart'))
-                                        @php  $items = session()->get('cart'); @endphp
-                                        @foreach($items->items as $item)
-                                            <div class="product product-widget">
-                                                <div class="product-thumb">
-                                                    @if($item['item']->image && app('files')->exists($item['item']->image))
-                                                        <img src="{!! asset($item['item']->image) !!}" alt="{{ $item['item']->name }}">
-                                                        @else
-                                                        <img src="{!! asset('front-assets/no-image.jpg') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="product-body">
-                                                    <h3 class="product-price">NPR {!! $item['price'] !!} <span class="qty"> x {!! $item['qty'] !!}</span></h3>
-                                                    <h2 class="product-name"><a href="#">{!! $item['item']->name !!}</a></h2>
-                                                </div>
-                                                <button class="cancel-btn"><i class="fa fa-trash"></i></button>
-                                            </div>
-                                        @endforeach
-                                        @else
-                                        <p>No cart found !!</p>
-                                    @endif
-                                </div>
-                                <div class="shopping-cart-btns">
-                                    <a href="{{ route('cart.view') }}"  class="main-btn">View Cart</a>
-                                    <a href="{{ route('cart.checkout') }}"  class="primary-btn">Checkout <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
                     </li>
-
                     <!-- /Cart -->
 
-                    <!-- Mobile nav toggle-->
                     <li class="nav-toggle">
                         <button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
                     </li>

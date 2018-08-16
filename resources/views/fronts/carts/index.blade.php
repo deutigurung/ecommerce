@@ -39,21 +39,29 @@
                                 @if($cartItem)
                                     @foreach($cartItem as $item)
                                         <tr>
-                                            <td class="thumb"><img src="{{ $item['item']->image }}" alt=""></td>
-                                            <td class="details">{{ $item['item']->id }}
-                                                <a href="#">{{ $item['item']->name }}</a><br>
+                                            <td class="thumb"><img src="{{ $item->options->image }}" alt=""></td>
+                                            <td class="details">
+                                                <a href="#">{{ $item->name }}</a><br>
                                             </td>
                                             <td class="price text-center">
-                                                <strong>NPR. {{ $item['item']->price }}</strong><br/>
+                                                <strong>NPR. {{ $item->price }}</strong><br/>
                                             </td>
                                             <td class="qty text-center center">
-                                                <input type="number" name="qty" class="input" value="{!! $item['qty'] !!}">
-                                          </td>
+                                                <form method="get" action="{{ route('cart.cartUpdate',$item->rowId) }}">
+                                                    <input type="number" name="qty" class="input" value="{!! $item->qty !!}">
+                                                    <button type="submit">ok</button>
+                                                </form>
+                                            </td>
                                             <td class="total text-center">
-                                                <strong class="primary-color">NPR. {!! $item['price'] !!}</strong>
+                                                <strong class="primary-color">NPR. {!! $item->subtotal !!}</strong>
                                             </td>
                                             <td class="text-right">
-                                                <a class="main-btn icon-btn"><i class="fa fa-close"></i></a>
+                                                <a href="javascript:void(0);" class="main-btn icon-btn"
+                                                   onclick="event.preventDefault();document.getElementById('delete_cartItem').submit();"><i class="fa fa-close"></i></a>
+                                                <form method="post" id="delete_cartItem" action="{{ route('cart.deleteCart',$item->rowId) }}">
+                                                    {{ method_field('delete') }}
+                                                    @csrf
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -65,14 +73,19 @@
                                 <tr>
                                     <th class="empty" colspan="3"></th>
                                     <th>TOTAL</th>
-                                    <th colspan="2" class="total">NPR. {{ $totalPrice }}</th>
+                                    <th colspan="2" class="total">NPR. {{ Cart::subtotal() }}</th>
                                 </tr>
                                 </tfoot>
                             </table>
                             <div class="pull-left">
                                 <a href="{{ url('/') }}" class="primary-btn">Continue Shopping</a>
+                                <a href="{{ route('cart.clearCart') }}" class="primary-btn">Clear Cart</a>
                             </div>
                             <div class="pull-right">
+                                {{--<form class="form-horizontal" method="POST" action="{!! {{ route('orderStore') }} !!}">
+                                    @csrf
+                                    @includeif('admin.banners.banner-form')
+                                </form>--}}
                                 <a href="{{ route('cart.checkout') }}" class="primary-btn">Place Order</a>
                                 @csrf
                             </div>
@@ -84,4 +97,26 @@
             </div>
         </div>
     </div>
+    {{--
+    <script type="text/javascript">
+        function changeValue(total_id,unit_price,elem,old_price){
+            var qty = $(elem).val();
+            var total_price = unit_price * qty;
+            $('#'+total_id).html(+total_price);
+            var sub_total = $('.total').data(total);
+            console.log(sub_total);
+        }
+        </script>
+    --}}
 @stop
+$order_id = DB::getPdo()->lastInsertId();
+foreach ($cart as $data) {
+$total_price = $data['price'] * $data['qty'];
+$qty = $data['qty'];
+$OrderPro = new OrderProduct();
+$OrderPro->order_id = $order_id;
+$OrderPro->product_id = $data['product_id'];
+$OrderPro->total = $data['product_price'];
+$OrderPro->qty = $data['product_quantity'];
+$OrderPro->save();
+}

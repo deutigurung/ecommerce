@@ -18,12 +18,21 @@ Route::group(['as'=>'front.','namespace'=>'Front'], function () {
     Route::get('product/{id}','FrontController@getProductByCategory')->name('product');
 });
 
+Route::get('clear-session',function (){
+    session()->forget('cart');
+    redirect()->back();
+});
 /** Cart Route**/
-Route::group(['as'=>'cart.','namespace'=>'Cart'],function() {
-    Route::post('cart/','CartController@AddToCart')->name('add_to_cart');
-    Route::get('cart-view','CartController@getCart')->name('view');
-    Route::get('checkout','CartController@checkoutCart')->name('checkout');
-    Route::delete('cart-view/{id}','CartController@destroyCartProduct')->name('destroy_cart_product');
+Route::group(['as'=>'cart.','namespace'=>'Cart'],function(){
+    Route::get('cart-view','CartController@getCart')->name('index');
+    Route::post('add-to-cart/{id}','CartController@AddToCart')->name('addCart');
+    Route::post('cart-store','CartController@store')->name('store');
+    Route::get('cart/{id}','CartController@cartUpdate')->name('cartUpdate');
+    Route::delete('cart/{id}','CartController@destroyCart')->name('deleteCart');
+    Route::get('clearCart','CartController@clearCart')->name('clearCart');
+});
+Route::group(['middleware'=>'auth'],function (){
+    Route::get('checkout','Cart\CheckoutController@orderPlacemnt')->name('cart.checkout');
 });
 
 Auth::routes();

@@ -230,16 +230,16 @@
                                                     <i class="fa fa-star-o empty"></i>
                                                 </div>
                                                 <h2 class="product-name">{!! $product->name !!}</h2>
-                                                <div class="product-btns">
+                                                {{--<div class="product-btns">
                                                     <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
                                                     <button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-                                                    <a href="javascript:void(0);" class="primary-btn add-to-cart"
-                                                       onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
-                                                    <form method="POST" id="add_to_cart" action="{{ route('cart.add_to_cart',$product->id) }}">
+                                                    <a href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('add_to_cart').submit();"
+                                                       class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                                                    <form method="POST" id="add_to_cart" action="{{ route('cart.addCart',$product->id) }}">
                                                         @csrf
                                                         <input type="hidden" name="product_id" value="{{$product->id}}">
                                                     </form>
-                                                </div>
+                                                </div>--}}
                                             </div>
                                         </div>
                                     </div>

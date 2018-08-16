@@ -12,36 +12,36 @@
         </div>
     </div>
     <!-- /BREADCRUMB -->
-
     <!-- section -->
     <div class="section">
         <!-- container -->
         <div class="container">
             <!-- row -->
             <div class="row">
-                <form id="checkout-form" method="post" action="" class="form-horizontal">
+                <form id="checkout-form" method="post" action="{{ route('cart.store') }}" class="form-horizontal">
                     @csrf
                     <div class="billing-details">
+
                         <div class="row">
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="name">Name <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6">
-                                        <input type="text" id="name" class="form-control" required>
+                                        <input type="text" id="name" value="{{ auth()->user()->name }}" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="">Email <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6">
-                                        <input type="text" id="email" class="form-control" required>
+                                        <input type="text" id="email" value="{{ auth()->user()->email }}" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-3" for="">Address <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6">
-                                        <input type="text" id="address_zip" class="form-control" required>
+                                        <input type="text" id="address_zip" value="{{ auth()->user()->address }}" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -86,6 +86,7 @@
                                     </div>
                                 </div>
                             </div>
+
                     </div>
                 </form>
             </div>
