@@ -39,6 +39,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/profile', 'Admin\UserController@getProfile')->name('profile');
+Route::get('/orders', 'Admin\UserController@getOrder')->name('order');
 
 Route::get('/admin',['as'=>'admin.dashboard', 'uses'=>'Admin\DashboardController@getDashboard',['middleware' => 'auth']]);
 

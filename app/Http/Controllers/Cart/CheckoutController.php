@@ -37,6 +37,6 @@ class CheckoutController extends Controller
             $new->save();
         }
         Session::forget('cart');
-        return redirect()->route('profile')->with('success','Your order have been placed successfully.');
+        return redirect()->route('home')->with('success','Your order have been placed successfully.');
     }
 }

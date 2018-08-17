@@ -15,7 +15,9 @@
                     @endif
 
                     You are logged in!
-
+                    <br> <br>
+                    <a href="{{ route('order') }}" class="btn btn-primary">View Order</a>
+                    <a href="{{ route('profile') }}" class="btn btn-success">View Profile</a>
                 </div>
             </div>
         </div>

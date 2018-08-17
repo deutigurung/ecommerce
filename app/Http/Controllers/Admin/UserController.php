@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\Models\Role;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -62,9 +63,9 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success','New Admin Created Successfully.');
     }
 
-    public function show($id)
+    public function getProfile()
     {
-        //
+        return view('profile');
     }
 
     public function edit($id)
@@ -118,15 +119,19 @@ class UserController extends Controller
         if ($user->delete()) {
             return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
         }
-
     }
 
-    public function getProfile() {
-        $orders = auth()->user()->orders;
-        $orders->transform(function($order, $key) {
-            $order->cart = unserialize($order->cart);
-            return $order;
-        });
-        return view('profile', ['orders' => $orders]);
+    public function getOrder() {
+        $orders = Order::find(auth()->id());
+        if($orders){
+            $orders = auth()->user()->orders;
+            $orders->transform(function($order, $key) {
+                $order->cart = unserialize($order->cart);
+                return $order;
+            });
+        }else{
+            false;
+        }
+        return view('order', ['orders' => $orders]);
     }
 }
