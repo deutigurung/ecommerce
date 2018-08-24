@@ -85,12 +85,10 @@
                                 <a href="{{ route('cart.clearCart') }}" class="primary-btn">Clear Cart</a>
                             </div>
                             <div class="pull-right">
-                                <a href="{{ route('cart.checkout') }}" class="primary-btn">Place Order</a>
+                                <a href="{{ route('checkout') }}" class="primary-btn">Checkout</a>
                                 @csrf
                             </div>
-
                         </div>
-
                     </div>
                 </div>
             </div>

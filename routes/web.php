@@ -41,8 +41,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/profile', 'Admin\UserController@getProfile')->name('profile');
 Route::get('/orders', 'Admin\UserController@getOrder')->name('order');
 
+/** Checkout Route **/
+Route::get('checkout','Cart\CartController@getCheckout')->name('checkout');
+
 /** Paypal Route **/
-Route::get('paywithpaypal', array('as' => 'addmoney.paywithpaypal','uses' => 'Paypal\AddMoneyController@payWithPaypal',));
+/*Route::get('paywithpaypal', array('as' => 'addmoney.paywithpaypal','uses' => 'Paypal\AddMoneyController@payWithPaypal',));*/
 Route::post('paypal', array('as' => 'addmoney.paypal','uses' => 'Paypal\AddMoneyController@postPaymentWithpaypal',));
 Route::get('paypal', array('as' => 'payment.status','uses' => 'Paypal\AddMoneyController@getPaymentStatus',));
 

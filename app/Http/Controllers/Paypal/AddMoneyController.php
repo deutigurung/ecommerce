@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Paypal;
 
-use Illuminate\Http\Request;
+
 use App\Http\Requests;
-use Validator;
-use URL;
-use Session;
-use Redirect;
-use Input;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Input;
 /** All Paypal Details class **/
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
@@ -34,12 +36,11 @@ class AddMoneyController extends Controller
      */
     public function __construct()
     {
-        parent::__construct();
-
         /** setup PayPal api context **/
-        $paypal_conf = \Config::get('paypal');
+        $paypal_conf = Config::get('paypal');
         $this->_api_context = new ApiContext(new OAuthTokenCredential($paypal_conf['client_id'], $paypal_conf['secret']));
         $this->_api_context->setConfig($paypal_conf['settings']);
+
     }
     /**
      * Show the application paywith paypalpage.
@@ -58,13 +59,18 @@ class AddMoneyController extends Controller
      */
     public function postPaymentWithpaypal(Request $request)
     {
+       // dd($request->all());
+       /* $this->validate($request,[
+            'amount'=>'required|numeric'
+        ]);*/
+
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');
         $item_1 = new Item();
-        $item_1->setName('Item 1') /** item name **/
+        $item_1->setName('Jense') /** item name **/
         ->setCurrency('USD')
             ->setQuantity(1)
-            ->setPrice($request->get('amount')); /** unit price **/
+            ->setPrice($request->input('amount')); /** unit price **/
         $item_list = new ItemList();
         $item_list->setItems(array($item_1));
         $amount = new Amount();
@@ -73,7 +79,7 @@ class AddMoneyController extends Controller
         $transaction = new Transaction();
         $transaction->setAmount($amount)
             ->setItemList($item_list)
-            ->setDescription('Your transaction description');
+            ->setDescription('My first Product transition with paypal');
         $redirect_urls = new RedirectUrls();
         $redirect_urls->setReturnUrl(URL::route('payment.status')) /** Specify return URL **/
         ->setCancelUrl(URL::route('payment.status'));
@@ -86,14 +92,14 @@ class AddMoneyController extends Controller
         try {
             $payment->create($this->_api_context);
         } catch (\PayPal\Exception\PPConnectionException $ex) {
-            if (\Config::get('app.debug')) {
-                \Session::put('error','Connection timeout');
+            if (Config::get('app.debug')) {
+                Session::put('error','Connection timeout');
                 return Redirect::route('addmoney.paywithpaypal');
                 /** echo "Exception: " . $ex->getMessage() . PHP_EOL; **/
                 /** $err_data = json_decode($ex->getData(), true); **/
                 /** exit; **/
             } else {
-                \Session::put('error','Some error occur, sorry for inconvenient');
+                Session::put('error','Some error occur, sorry for inconvenient');
                 return Redirect::route('addmoney.paywithpaypal');
                 /** die('Some error occur, sorry for inconvenient'); **/
             }
@@ -110,17 +116,17 @@ class AddMoneyController extends Controller
             /** redirect to paypal **/
             return Redirect::away($redirect_url);
         }
-        \Session::put('error','Unknown error occurred');
+        Session::put('error','Unknown error occurred');
         return Redirect::route('addmoney.paywithpaypal');
     }
     public function getPaymentStatus()
     {
-        /** Get the payment ID before session clear **/
+         /** Get the payment ID before session clear **/
         $payment_id = Session::get('paypal_payment_id');
         /** clear the session payment ID **/
         Session::forget('paypal_payment_id');
         if (empty(Input::get('PayerID')) || empty(Input::get('token'))) {
-            \Session::put('error','Payment failed');
+            Session::put('error','Payment failed');
             return Redirect::route('addmoney.paywithpaypal');
         }
         $payment = Payment::get($payment_id, $this->_api_context);
@@ -135,6 +141,9 @@ class AddMoneyController extends Controller
         /** dd($result);exit; /** DEBUG RESULT, remove it later **/
         if ($result->getState() == 'approved') {
 
+           echo "<pre>";
+           print_r($result->toArray());
+           die;
             /** it's all right **/
             /** Here Write your database logic like that insert record or value in database if you want **/
             \Session::put('success','Payment success');
@@ -142,5 +151,6 @@ class AddMoneyController extends Controller
         }
         \Session::put('error','Payment failed');
         return Redirect::route('addmoney.paywithpaypal');
+
     }
 }

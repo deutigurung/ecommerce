@@ -8,6 +8,23 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 
+use Validator;
+use Illuminate\Support\Facades\URL;
+use Redirect;
+use Input;
+/** All Paypal Details class **/
+use PayPal\Rest\ApiContext;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Api\Amount;
+use PayPal\Api\Details;
+use PayPal\Api\Item;
+use PayPal\Api\ItemList;
+use PayPal\Api\Payer;
+use PayPal\Api\Payment;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\ExecutePayment;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\Transaction;
 class CartController extends Controller
 {
     public function getCart(){
@@ -39,6 +56,40 @@ class CartController extends Controller
         //dd($cart);
         $request->session()->put('cart', $cart);
         return back();
+    }
+
+    public function getCheckout()
+    {
+        if (!Session::has('cart')) {
+            return redirect()->route('front.home');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+        $totalPrice = $cart->totalPrice;
+        return view('fronts.carts.payment',['totalPrice'=>$totalPrice]);
+    }
+
+    public function postCheckout(Request $request)
+    {
+        if (!Session::has('cart')) {
+            return redirect()->route('front.home');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+       $payer = new Payer();
+        $payer->setPaymentMethod('paypal');
+        try {
+            Charge::create(array(
+                "amount" => $cart->totalPrice,
+                "currency" => "NPR",
+                "source" => $request->input('stripeToken'), // obtained with Stripe.js
+                "description" => "Test Charge"
+            ));
+        } catch (\Exception $e) {
+            return redirect()->route('checkout')->with('error', $e->getMessage());
+        }
+        Session::forget('cart');
+        return redirect()->route('home')->with('success', 'Successfully purchased products!');
     }
 
     public function destroyCart($id){
